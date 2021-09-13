@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:survey_app/injection_container.dart' as di;
+import 'package:survey_app/ui/home/home_screen.dart';
+import 'package:survey_app/ui/login/login_screen.dart';
 
 void main() {
   di.setup();
@@ -10,17 +14,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Material App Bar'),
-        ),
-        body: Center(
-          child: Container(
-            child: Text('Hello World'),
+        title: 'Survey App',
+        home: BlocProvider(
+          create: (context) => di.locator<AuthenticationBloc>(),
+          child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              if (state is AuthenticationFailure) {
+                return LoginScreen();
+              } else if (state is AuthenticationSuccess) {
+                return HomeScreen();
+              } else {
+                return Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
