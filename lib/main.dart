@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:survey_app/injection_container.dart' as di;
 
-void main() => runApp(MyApp());
+void main() {
+  di.setup();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
