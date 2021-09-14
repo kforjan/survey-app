@@ -18,19 +18,28 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AuthenticationStarted) {
-      _mapAuthenticationStartedToState();
+      yield* _mapAuthenticationStartedToState();
     }
     if (event is LoggedIn) {
-      _mapLoggedInToState();
+      yield* _mapLoggedInToState();
     }
     if (event is LoggedOut) {
-      _mapALoggedOutToState();
+      yield* _mapALoggedOutToState();
     }
   }
 
-  Stream<AuthenticationState> _mapAuthenticationStartedToState() async* {}
+  Stream<AuthenticationState> _mapAuthenticationStartedToState() async* {
+    final isSignedIn = await _userRepository.isSignedIn;
+    if (isSignedIn) {
+      yield AuthenticationSuccess();
+    } else {
+      yield AuthenticationFailure();
+    }
+  }
 
-  Stream<AuthenticationState> _mapLoggedInToState() async* {}
+  Stream<AuthenticationState> _mapLoggedInToState() async* {
+    yield AuthenticationSuccess();
+  }
 
   Stream<AuthenticationState> _mapALoggedOutToState() async* {
     yield AuthenticationFailure();
