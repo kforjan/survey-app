@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:survey_app/data/user_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc() : super(AuthenticationInitial());
+  AuthenticationBloc(this._userRepository) : super(AuthenticationInitial());
+
+  final UserRepository _userRepository;
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -31,6 +34,6 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapALoggedOutToState() async* {
     yield AuthenticationFailure();
-    //TODO: signout func
+    _userRepository.signOut();
   }
 }
