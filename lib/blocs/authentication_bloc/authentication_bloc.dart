@@ -17,18 +17,18 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    if (event is AuthenticationStarted) {
-      yield* _mapAuthenticationStartedToState();
+    if (event is CheckExistingAuth) {
+      yield* _mapCheckExistingAuthToState();
     }
-    if (event is LoggedIn) {
-      yield* _mapLoggedInToState();
+    if (event is LogIn) {
+      yield* _mapLogInToState();
     }
-    if (event is LoggedOut) {
-      yield* _mapALoggedOutToState();
+    if (event is LogOut) {
+      yield* _mapALogOutToState();
     }
   }
 
-  Stream<AuthenticationState> _mapAuthenticationStartedToState() async* {
+  Stream<AuthenticationState> _mapCheckExistingAuthToState() async* {
     final isSignedIn = await _userRepository.isSignedIn;
     if (isSignedIn) {
       yield AuthenticationSuccess();
@@ -37,11 +37,11 @@ class AuthenticationBloc
     }
   }
 
-  Stream<AuthenticationState> _mapLoggedInToState() async* {
+  Stream<AuthenticationState> _mapLogInToState() async* {
     yield AuthenticationSuccess();
   }
 
-  Stream<AuthenticationState> _mapALoggedOutToState() async* {
+  Stream<AuthenticationState> _mapALogOutToState() async* {
     yield AuthenticationFailure();
     _userRepository.signOut();
   }

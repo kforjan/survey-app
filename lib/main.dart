@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Survey App',
       home: BlocProvider(
         create: (context) =>
-            di.locator<AuthenticationBloc>()..add(AuthenticationStarted()),
+            di.locator<AuthenticationBloc>()..add(CheckExistingAuth()),
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
             print(state);
