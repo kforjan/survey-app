@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:survey_app/ui/register/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -54,7 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text('Sign in'),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                    );
+                  },
                   child: Text('Don\'t have an account? Register here'),
                 ),
               ],
