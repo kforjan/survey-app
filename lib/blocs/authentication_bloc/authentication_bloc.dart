@@ -21,7 +21,7 @@ class AuthenticationBloc
       yield* _mapCheckExistingAuthToState();
     }
     if (event is LogIn) {
-      yield* _mapLogInToState();
+      yield* _mapLogInToState(event);
     }
     if (event is LogOut) {
       yield* _mapALogOutToState();
@@ -33,16 +33,28 @@ class AuthenticationBloc
     if (isSignedIn) {
       yield AuthenticationSuccess();
     } else {
-      yield AuthenticationFailure();
+      yield AuthenticationInitial();
     }
   }
 
-  Stream<AuthenticationState> _mapLogInToState() async* {
-    yield AuthenticationSuccess();
+  Stream<AuthenticationState> _mapLogInToState(LogIn event) async* {
+    try {
+      final userCred = await _userRepository.signInWithCredentials(
+          event.email, event.password);
+      if (userCred.user != null) {
+        yield AuthenticationSuccess();
+      } else {
+        yield AuthenticationFailure();
+        yield AuthenticationInitial();
+      }
+    } catch (e) {
+      yield AuthenticationFailure();
+      yield AuthenticationInitial();
+    }
   }
 
   Stream<AuthenticationState> _mapALogOutToState() async* {
-    yield AuthenticationFailure();
+    yield AuthenticationInitial();
     _userRepository.signOut();
   }
 }

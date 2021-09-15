@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
             di.locator<AuthenticationBloc>()..add(CheckExistingAuth()),
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            if (state is AuthenticationFailure) {
+            if (state is AuthenticationInitial) {
               return LoginScreen();
             } else if (state is AuthenticationSuccess) {
               return HomeScreen();

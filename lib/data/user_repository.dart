@@ -11,7 +11,7 @@ class UserRepository {
     return currentUser != null;
   }
 
-  Future<void> signInWithCredentials(String email, String password) {
+  Future<UserCredential> signInWithCredentials(String email, String password) {
     return _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,26 +22,43 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildEmailTextField(),
-              _buildPasswordTextField(),
-              SizedBox(
-                height: 50,
+      body: BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is AuthenticationFailure) {
+            showDialog(
+              context: context,
+              builder: (cotnext) => AlertDialog(
+                content: Text('Wrong e-mail or password'),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Sign in'),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text('Don\'t have an account? Register here'),
-              ),
-            ],
+            );
+          }
+        },
+        child: Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildEmailTextField(),
+                _buildPasswordTextField(),
+                SizedBox(
+                  height: 50,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    print(_email);
+                    BlocProvider.of<AuthenticationBloc>(context).add(
+                      LogIn(email: _email, password: _password),
+                    );
+                  },
+                  child: Text('Sign in'),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text('Don\'t have an account? Register here'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
