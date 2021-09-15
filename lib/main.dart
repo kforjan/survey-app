@@ -23,15 +23,11 @@ class MyApp extends StatelessWidget {
             di.locator<AuthenticationBloc>()..add(CheckExistingAuth()),
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            print(state);
             if (state is AuthenticationFailure) {
-              print('login');
               return LoginScreen();
             } else if (state is AuthenticationSuccess) {
-              print('home');
               return HomeScreen();
             } else {
-              print('else');
               return Scaffold(
                 body: Center(
                   child: CircularProgressIndicator(),
