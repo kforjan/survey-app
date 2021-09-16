@@ -10,7 +10,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   di.setup();
-  runApp(MyApp());
+  runApp(BlocProvider(
+    create: (context) =>
+        di.locator<AuthenticationBloc>()..add(CheckExistingAuth()),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,24 +22,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Survey App',
-      home: BlocProvider(
-        create: (context) =>
-            di.locator<AuthenticationBloc>()..add(CheckExistingAuth()),
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-            if (state is AuthenticationInitial) {
-              return LoginScreen();
-            } else if (state is AuthenticationSuccess) {
-              return HomeScreen();
-            } else {
-              return Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          },
-        ),
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is AuthenticationInitial) {
+            return LoginScreen();
+          } else if (state is AuthenticationSuccess) {
+            return HomeScreen();
+          } else {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
       ),
     );
   }

@@ -16,3 +16,15 @@ class LogIn extends AuthenticationEvent {
 }
 
 class LogOut extends AuthenticationEvent {}
+
+class Register extends AuthenticationEvent {
+  Register({
+    required this.email,
+    required this.password,
+    required this.confirmPassword,
+  });
+
+  final String email;
+  final String password;
+  final String confirmPassword;
+}
