@@ -28,13 +28,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
-          if (state is AuthenticationFailure) {
+          if (state is RegistrationFailure) {
             showDialog(
               context: context,
               builder: (cotnext) => AlertDialog(
-                content: Text('Wrong e-mail or password'),
+                title: Text('Please enter valid information'),
+                content: Text(
+                    'Password has to be at least 6 symbols long and e-mail has to have a valid e-mail format'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
               ),
             );
+          }
+          if (state is AuthenticationSuccess) {
+            Navigator.of(context).pop();
           }
         },
         child: Center(
@@ -51,7 +64,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print(_email);
+                    if (_password != _confirmPassword) {
+                      showDialog(
+                        context: context,
+                        builder: (cotnext) => AlertDialog(
+                          title: Text('Passwords do not match'),
+                          content: Text('Please try again'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                      return;
+                    }
                     BlocProvider.of<AuthenticationBloc>(context).add(
                       Register(
                           email: _email,

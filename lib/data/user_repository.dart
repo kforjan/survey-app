@@ -16,7 +16,7 @@ class UserRepository {
         email: email, password: password);
   }
 
-  Future<UserCredential> signUp(String email, String password) async {
+  Future<UserCredential> register(String email, String password) async {
     return await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,

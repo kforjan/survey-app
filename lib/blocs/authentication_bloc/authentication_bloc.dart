@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:survey_app/data/user_repository.dart';
 
@@ -23,6 +24,9 @@ class AuthenticationBloc
     if (event is LogIn) {
       yield* _mapLogInToState(event);
     }
+    if (event is Register) {
+      yield* _mapRegisterToState(event);
+    }
     if (event is LogOut) {
       yield* _mapALogOutToState();
     }
@@ -31,7 +35,8 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapCheckExistingAuthToState() async* {
     final isSignedIn = await _userRepository.isSignedIn;
     if (isSignedIn) {
-      yield AuthenticationSuccess();
+      final user = await _userRepository.currentUser;
+      yield AuthenticationSuccess(user!);
     } else {
       yield AuthenticationInitial();
     }
@@ -42,7 +47,7 @@ class AuthenticationBloc
       final userCred = await _userRepository.signInWithCredentials(
           event.email, event.password);
       if (userCred.user != null) {
-        yield AuthenticationSuccess();
+        yield AuthenticationSuccess(userCred.user!);
       } else {
         yield AuthenticationFailure();
         yield AuthenticationInitial();
@@ -50,6 +55,24 @@ class AuthenticationBloc
     } catch (e) {
       yield AuthenticationFailure();
       yield AuthenticationInitial();
+    }
+  }
+
+  Stream<AuthenticationState> _mapRegisterToState(Register event) async* {
+    if (event.password == event.confirmPassword) {
+      try {
+        final userCred =
+            await _userRepository.register(event.email, event.password);
+        if (userCred.user != null) {
+          yield AuthenticationSuccess(userCred.user!);
+        } else {
+          yield RegistrationFailure();
+          yield AuthenticationInitial();
+        }
+      } catch (e) {
+        yield RegistrationFailure();
+        yield AuthenticationInitial();
+      }
     }
   }
 
