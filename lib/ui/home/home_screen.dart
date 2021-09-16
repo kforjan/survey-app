@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:survey_app/ui/create_survey/create_survey_screen.dart';
+import 'package:survey_app/ui/profile/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,7 +34,13 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 50,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CreateSurveyScreen(),
+                              ),
+                            );
+                          },
                           child: Center(
                             child: Text('CREATE'),
                           ),
@@ -43,7 +51,13 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 50,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(),
+                              ),
+                            );
+                          },
                           child: Center(
                             child: Text('Profile'),
                           ),
