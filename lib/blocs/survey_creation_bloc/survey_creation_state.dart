@@ -10,5 +10,3 @@ class SurveyCreationInitial extends SurveyCreationState {
 }
 
 class SurveyCreationUploading extends SurveyCreationState {}
-
-class SurveyCreationSuccessful extends SurveyCreationState {}

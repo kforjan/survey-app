@@ -58,7 +58,6 @@ class SurveyCreationBloc
       try {
         yield SurveyCreationUploading();
         await _questionsRepository.uploadQuestions(state.questions);
-        yield SurveyCreationSuccessful();
         yield SurveyCreationInitial();
       } catch (e) {
         throw e;

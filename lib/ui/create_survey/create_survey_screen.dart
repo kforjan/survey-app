@@ -22,58 +22,51 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => di.locator<SurveyCreationBloc>(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Create a survey'),
-        ),
-        body: BlocConsumer<SurveyCreationBloc, SurveyCreationState>(
-          listener: (context, state) async {
-            if (state is SurveyCreationSuccessful) {
-              await locator<SurveyCreationBloc>().close();
-              Navigator.of(context).pop();
-            }
-          },
-          builder: (context, state) {
-            print(state);
-            if (state is SurveyCreationInitial) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: state.questions.length,
-                        itemBuilder: (context, index) =>
-                            _buildQuestionDisplayCard(
-                                context, state.questions[index]),
-                      ),
-                      _buildAddQustionButton(context),
-                      ElevatedButton(
-                        onPressed: () {
-                          locator<SurveyCreationBloc>().add(FinishSurvey());
-                        },
-                        child: Text('Submit'),
-                      ),
-                    ],
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Create a survey'),
+      ),
+      body: BlocBuilder<SurveyCreationBloc, SurveyCreationState>(
+        builder: (context, state) {
+          if (state is SurveyCreationInitial) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.questions.length,
+                      itemBuilder: (context, index) =>
+                          _buildQuestionDisplayCard(
+                              context, state.questions[index]),
+                    ),
+                    _buildAddQustionButton(context),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (state.questions.isEmpty) {
+                          return;
+                        }
+                        locator<SurveyCreationBloc>().add(FinishSurvey());
+                      },
+                      child: Text('Submit'),
+                    ),
+                  ],
                 ),
-              );
-            } else if (state is SurveyCreationUploading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          } else if (state is SurveyCreationUploading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
