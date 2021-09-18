@@ -6,6 +6,10 @@ class QuestionRepository {
   final FirebaseFirestore _firestore;
 
   Future<void> uploadQuestions() async {
-    _firestore.collection('surveys').doc().set({'lol': 'lolll'});
+    try {
+      _firestore.collection('surveys').doc('s').set({'lol': 'lolll'});
+    } catch (e) {
+      throw e;
+    }
   }
 }

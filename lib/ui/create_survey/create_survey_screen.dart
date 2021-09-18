@@ -46,7 +46,13 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                             _buildQuestionDisplayCard(
                                 context, state.questions[index]),
                       ),
-                      _buildAddQustionButton(context)
+                      _buildAddQustionButton(context),
+                      ElevatedButton(
+                        onPressed: () {
+                          locator<SurveyCreationBloc>().add(FinishSurvey());
+                        },
+                        child: Text('Submit'),
+                      ),
                     ],
                   ),
                 ),
