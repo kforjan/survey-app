@@ -15,17 +15,20 @@ class CreateSurveyScreen extends StatelessWidget {
           title: Text('Create a survey'),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 4,
-                itemBuilder: (context, index) => _buildQuestionCard(context),
-              ),
-              _buildAddQustionCard(context)
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 4,
+                  itemBuilder: (context, index) => _buildQuestionCard(context),
+                ),
+                _buildAddQustionCard(context)
+              ],
+            ),
           ),
         ),
       ),
@@ -34,19 +37,51 @@ class CreateSurveyScreen extends StatelessWidget {
 
   Widget _buildQuestionCard(BuildContext context) {
     return Card(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Enter your question here",
+              ),
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildAnswerTextField(context, 1),
+              SizedBox(
+                width: 20,
+              ),
+              _buildAnswerTextField(context, 2),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildAnswerTextField(context, 3),
+              SizedBox(
+                width: 20,
+              ),
+              _buildAnswerTextField(context, 4),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildAddQustionCard(BuildContext context) => Card(
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
+          width: MediaQuery.of(context).size.width * 0.7,
           height: 80,
           margin: EdgeInsets.only(left: 40),
           child: Center(
@@ -57,6 +92,16 @@ class CreateSurveyScreen extends StatelessWidget {
               ),
               title: Text('Add another question'),
             ),
+          ),
+        ),
+      );
+
+  Widget _buildAnswerTextField(BuildContext context, int answerNumber) =>
+      Container(
+        width: MediaQuery.of(context).size.width * 0.35,
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: "Answer $answerNumber",
           ),
         ),
       );
