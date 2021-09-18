@@ -54,10 +54,15 @@ class SurveyCreationBloc
 
   Stream<SurveyCreationState> _mapFinishSurveyToState(
       SurveyCreationState state) async* {
-    try {
-      _questionsRepository.uploadQuestions();
-    } catch (e) {
-      throw e;
+    if (state is SurveyCreationInitial) {
+      try {
+        yield SurveyCreationUploading();
+        await _questionsRepository.uploadQuestions(state.questions);
+        yield SurveyCreationSuccessful();
+        yield SurveyCreationInitial();
+      } catch (e) {
+        throw e;
+      }
     }
   }
 }

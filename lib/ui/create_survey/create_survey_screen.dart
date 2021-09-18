@@ -29,8 +29,14 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
           title: Text('Create a survey'),
         ),
         body: BlocConsumer<SurveyCreationBloc, SurveyCreationState>(
-          listener: (context, state) {},
+          listener: (context, state) async {
+            if (state is SurveyCreationSuccessful) {
+              await locator<SurveyCreationBloc>().close();
+              Navigator.of(context).pop();
+            }
+          },
           builder: (context, state) {
+            print(state);
             if (state is SurveyCreationInitial) {
               return SingleChildScrollView(
                 child: Padding(
@@ -56,6 +62,10 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                     ],
                   ),
                 ),
+              );
+            } else if (state is SurveyCreationUploading) {
+              return Center(
+                child: CircularProgressIndicator(),
               );
             } else {
               return Center(
