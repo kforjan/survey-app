@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:survey_app/models/question.dart';
 
-class QuestionRepository {
-  QuestionRepository(this._firestore);
+class SurveyRepository {
+  SurveyRepository(this._firestore);
 
   final FirebaseFirestore _firestore;
 
-  Future<void> uploadQuestions(List<Question> questions) async {
+  Future<void> uploadSurvey(String title, List<Question> questions) async {
     final jsonQuestions = questions
         .map((e) => {
               'question': e.question,
@@ -18,7 +18,8 @@ class QuestionRepository {
         .toList();
     try {
       _firestore.collection('surveys').doc().set({
-        "questions": jsonQuestions,
+        'title': title,
+        'questions': jsonQuestions,
       });
     } catch (e) {
       throw e;

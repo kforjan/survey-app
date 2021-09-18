@@ -15,4 +15,8 @@ class RemoveQuestion extends SurveyCreationEvent {
   final Question question;
 }
 
-class FinishSurvey extends SurveyCreationEvent {}
+class FinishSurvey extends SurveyCreationEvent {
+  FinishSurvey(this.title);
+
+  final String title;
+}

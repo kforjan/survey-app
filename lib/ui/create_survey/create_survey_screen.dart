@@ -14,6 +14,7 @@ class CreateSurveyScreen extends StatefulWidget {
 }
 
 class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
+  TextEditingController _titleController = TextEditingController();
   TextEditingController _questionController = TextEditingController();
   TextEditingController _answer1Controller = TextEditingController();
   TextEditingController _answer2Controller = TextEditingController();
@@ -35,6 +36,14 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 35),
+                      child: TextField(
+                        decoration: InputDecoration(hintText: 'Title'),
+                        controller: _titleController,
+                      ),
+                    ),
                     ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -49,7 +58,9 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                         if (state.questions.isEmpty) {
                           return;
                         }
-                        locator<SurveyCreationBloc>().add(FinishSurvey());
+                        locator<SurveyCreationBloc>()
+                            .add(FinishSurvey(_titleController.text));
+                        _titleController.clear();
                       },
                       child: Text('Submit'),
                     ),

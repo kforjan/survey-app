@@ -4,8 +4,12 @@ part of 'survey_creation_bloc.dart';
 abstract class SurveyCreationState {}
 
 class SurveyCreationInitial extends SurveyCreationState {
-  SurveyCreationInitial({this.questions = const []});
+  SurveyCreationInitial({
+    this.title = '',
+    this.questions = const [],
+  });
 
+  final title;
   final List<Question> questions;
 }
 
