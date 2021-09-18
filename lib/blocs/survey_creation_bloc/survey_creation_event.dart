@@ -9,6 +9,10 @@ class AddQuestion extends SurveyCreationEvent {
   final Question question;
 }
 
-class RemoveQuestion extends SurveyCreationEvent {}
+class RemoveQuestion extends SurveyCreationEvent {
+  RemoveQuestion(this.question);
+
+  final Question question;
+}
 
 class FinishSurvey extends SurveyCreationEvent {}

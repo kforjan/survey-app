@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_app/blocs/survey_creation_bloc/survey_creation_bloc.dart';
 import 'package:survey_app/injection_container.dart' as di;
+import 'package:survey_app/injection_container.dart';
 import 'package:survey_app/models/question.dart';
 
 class CreateSurveyScreen extends StatefulWidget {
@@ -12,6 +14,12 @@ class CreateSurveyScreen extends StatefulWidget {
 }
 
 class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
+  TextEditingController _questionController = TextEditingController();
+  TextEditingController _answer1Controller = TextEditingController();
+  TextEditingController _answer2Controller = TextEditingController();
+  TextEditingController _answer3Controller = TextEditingController();
+  TextEditingController _answer4Controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -36,13 +44,7 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                         itemCount: state.questions.length,
                         itemBuilder: (context, index) =>
                             _buildQuestionDisplayCard(
-                                context,
-                                Question(
-                                    question: 'question',
-                                    answer1: 'answer1',
-                                    answer2: 'answer2',
-                                    answer3: 'answer3',
-                                    answer4: 'answer4')),
+                                context, state.questions[index]),
                       ),
                       _buildAddQustionButton(context)
                     ],
@@ -63,6 +65,9 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
   Widget _buildQuestionDisplayCard(BuildContext context, Question question) =>
       Dismissible(
         key: UniqueKey(),
+        onDismissed: (direction) {
+          locator<SurveyCreationBloc>().add(RemoveQuestion(question));
+        },
         direction: DismissDirection.endToStart,
         confirmDismiss: (DismissDirection direction) async {
           return await showDialog(
@@ -111,16 +116,35 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                     horizontal: 20,
                     vertical: 10,
                   ),
-                  child: Text(question.question),
+                  child: Text(
+                    question.question,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(question.answer1),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          '1: ${question.answer1}',
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       width: 20,
                     ),
-                    Text(question.answer2),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          '2: ${question.answer2}',
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -129,11 +153,27 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(question.answer3),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          '3: ${question.answer3}',
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       width: 20,
                     ),
-                    Text(question.answer4),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          '4: ${question.answer4}',
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -156,6 +196,7 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
               vertical: 10,
             ),
             child: TextField(
+              controller: _questionController,
               decoration: InputDecoration(
                 hintText: "Enter your question here",
               ),
@@ -164,21 +205,21 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildAnswerTextField(context, 1),
+              _buildAnswerTextField(context, 1, _answer1Controller),
               SizedBox(
                 width: 20,
               ),
-              _buildAnswerTextField(context, 2),
+              _buildAnswerTextField(context, 2, _answer2Controller),
             ],
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildAnswerTextField(context, 3),
+              _buildAnswerTextField(context, 3, _answer3Controller),
               SizedBox(
                 width: 20,
               ),
-              _buildAnswerTextField(context, 4),
+              _buildAnswerTextField(context, 4, _answer4Controller),
             ],
           ),
           SizedBox(
@@ -186,17 +227,29 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              print('lda');
+              if (_questionController.text == "" ||
+                  _answer1Controller.text == "" ||
+                  _answer2Controller.text == "" ||
+                  _answer3Controller.text == "" ||
+                  _answer4Controller.text == "") {
+                return;
+              }
               di.locator<SurveyCreationBloc>().add(
                     AddQuestion(
                       Question(
-                          question: 'question',
-                          answer1: 'answer1',
-                          answer2: 'answer2',
-                          answer3: 'answer3',
-                          answer4: 'answer4'),
+                          question: _questionController.text,
+                          answer1: _answer1Controller.text,
+                          answer2: _answer2Controller.text,
+                          answer3: _answer3Controller.text,
+                          answer4: _answer4Controller.text),
                     ),
                   );
+              _questionController.clear();
+              _answer1Controller.clear();
+              _answer2Controller.clear();
+              _answer3Controller.clear();
+              _answer4Controller.clear();
+              Navigator.of(context).pop();
             },
             child: Text('Confirm'),
           ),
@@ -230,10 +283,12 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
         ),
       );
 
-  Widget _buildAnswerTextField(BuildContext context, int answerNumber) =>
+  Widget _buildAnswerTextField(BuildContext context, int answerNumber,
+          TextEditingController controller) =>
       Container(
         width: MediaQuery.of(context).size.width * 0.3,
         child: TextField(
+          controller: controller,
           decoration: InputDecoration(
             hintText: "Answer $answerNumber",
           ),
