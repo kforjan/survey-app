@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:survey_app/data/question_repository.dart';
 import 'package:survey_app/models/question.dart';
 
 part 'survey_creation_event.dart';
@@ -9,7 +10,10 @@ part 'survey_creation_state.dart';
 
 class SurveyCreationBloc
     extends Bloc<SurveyCreationEvent, SurveyCreationState> {
-  SurveyCreationBloc() : super(SurveyCreationInitial());
+  SurveyCreationBloc(this._questionsRepository)
+      : super(SurveyCreationInitial());
+
+  final QuestionRepository _questionsRepository;
 
   @override
   Stream<SurveyCreationState> mapEventToState(
@@ -20,6 +24,9 @@ class SurveyCreationBloc
     }
     if (event is RemoveQuestion) {
       yield* _mapRemoveQuestionToState(event, state);
+    }
+    if (event is FinishSurvey) {
+      yield* _mapFinishSurveyToState(state);
     }
   }
 
@@ -42,6 +49,15 @@ class SurveyCreationBloc
               element.answer3 == event.question.answer3 &&
               element.answer4 == event.question.answer4));
       yield SurveyCreationInitial(questions: newQuestions);
+    }
+  }
+
+  Stream<SurveyCreationState> _mapFinishSurveyToState(
+      SurveyCreationState state) async* {
+    try {
+      _questionsRepository.uploadQuestions();
+    } catch (e) {
+      throw e;
     }
   }
 }
