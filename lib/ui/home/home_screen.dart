@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
@@ -35,13 +36,20 @@ class HomeScreen extends StatelessWidget {
                       if (state is SurveysLoaded) {
                         return Expanded(
                           child: RefreshIndicator(
+                            strokeWidth: 3,
+                            triggerMode: RefreshIndicatorTriggerMode.anywhere,
                             onRefresh: () async {
                               locator<SurveySelectionBloc>().add(LoadSurveys());
                             },
                             child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
                               itemCount: state.ids.length,
                               itemBuilder: (context, index) =>
-                                  Text(state.titles[index]),
+                                  _buildSurveySelectionCard(
+                                context,
+                                state.titles[index],
+                                state.ids[index],
+                              ),
                             ),
                           ),
                         );
@@ -62,11 +70,14 @@ class HomeScreen extends StatelessWidget {
                         height: 50,
                         child: InkWell(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CreateSurveyScreen(),
-                              ),
-                            );
+                            Navigator.of(context)
+                                .push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CreateSurveyScreen(),
+                                  ),
+                                )
+                                .then((value) => locator<SurveySelectionBloc>()
+                                    .add(LoadSurveys()));
                           },
                           child: Center(
                             child: Text('CREATE'),
@@ -104,6 +115,37 @@ class HomeScreen extends StatelessWidget {
           );
         }
       },
+    );
+  }
+
+  Widget _buildSurveySelectionCard(
+      BuildContext context, String title, String id) {
+    return Card(
+      key: UniqueKey(),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.095,
+                child: Center(
+                  child: Text(title),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(CupertinoIcons.chart_pie_fill),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
