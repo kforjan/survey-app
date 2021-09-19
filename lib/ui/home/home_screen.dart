@@ -5,6 +5,7 @@ import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:survey_app/blocs/survey_selection_bloc/survey_selection_bloc.dart';
 import 'package:survey_app/injection_container.dart';
 import 'package:survey_app/ui/create_survey/create_survey_screen.dart';
+import 'package:survey_app/ui/fill_survey/fill_survey_screen.dart';
 import 'package:survey_app/ui/profile/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -127,7 +128,15 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             flex: 4,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        FillSurveyScreen(id: id, title: title),
+                  ),
+                );
+              },
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.095,
                 child: Center(
