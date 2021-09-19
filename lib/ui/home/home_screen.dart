@@ -32,12 +32,26 @@ class HomeScreen extends StatelessWidget {
                       locator<SurveySelectionBloc>()..add(LoadSurveys()),
                   child: BlocBuilder<SurveySelectionBloc, SurveySelectionState>(
                     builder: (context, state) {
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: 10,
-                          itemBuilder: (context, index) => Text('lol'),
-                        ),
-                      );
+                      if (state is SurveysLoaded) {
+                        return Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              locator<SurveySelectionBloc>().add(LoadSurveys());
+                            },
+                            child: ListView.builder(
+                              itemCount: state.ids.length,
+                              itemBuilder: (context, index) =>
+                                  Text(state.titles[index]),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Expanded(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),

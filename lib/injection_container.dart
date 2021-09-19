@@ -16,5 +16,5 @@ void setup() {
   locator.registerLazySingleton(() => SurveyRepository(locator()));
   locator.registerLazySingleton(() => FirebaseFirestore.instance);
   locator.registerLazySingleton(() => SurveyCreationBloc(locator()));
-  locator.registerFactory(() => SurveySelectionBloc(locator()));
+  locator.registerLazySingleton(() => SurveySelectionBloc(locator()));
 }
