@@ -45,9 +45,7 @@ class SurveyRepository {
 
   Future<List<Question>> loadSurvey(String id) async {
     final queryQuestion = await _firestore.collection('surveys').doc(id).get();
-    queryQuestion.data();
-    final List<Map<String, dynamic>> questionsAsMaps =
-        queryQuestion.data()!['questions'];
+    final List<dynamic> questionsAsMaps = queryQuestion.data()!['questions'];
     final questions = questionsAsMaps
         .map(
           (e) => Question(

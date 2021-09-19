@@ -3,7 +3,11 @@ part of 'fill_survey_bloc.dart';
 @immutable
 abstract class FillSurveyEvent {}
 
-class GetSurveyQuestions extends FillSurveyEvent {}
+class LoadSurveyQuestions extends FillSurveyEvent {
+  final String id;
+
+  LoadSurveyQuestions(this.id);
+}
 
 class ChangeSurveyData extends FillSurveyEvent {}
 
