@@ -59,4 +59,69 @@ class SurveyRepository {
         .toList();
     return questions;
   }
+
+  Future<void> uploadSurveyAnswers(String id, List<int> answers) async {
+    for (int i = 0; i < answers.length; i++) {
+      if (answers[i] == 1) {
+        await _firestore.collection('surveys').doc(id).set(
+          {
+            'answers': {
+              i.toString(): {
+                'nAnswers1': FieldValue.increment(1),
+                'nAnswers2': FieldValue.increment(0),
+                'nAnswers3': FieldValue.increment(0),
+                'nAnswers4': FieldValue.increment(0),
+              },
+            },
+          },
+          SetOptions(merge: true),
+        );
+      }
+      if (answers[i] == 2) {
+        await _firestore.collection('surveys').doc(id).set(
+          {
+            'answers': {
+              i.toString(): {
+                'nAnswers1': FieldValue.increment(0),
+                'nAnswers2': FieldValue.increment(1),
+                'nAnswers3': FieldValue.increment(0),
+                'nAnswers4': FieldValue.increment(0),
+              }
+            },
+          },
+          SetOptions(merge: true),
+        );
+      }
+      if (answers[i] == 3) {
+        await _firestore.collection('surveys').doc(id).set(
+          {
+            'answers': {
+              i.toString(): {
+                'nAnswers1': FieldValue.increment(0),
+                'nAnswers2': FieldValue.increment(0),
+                'nAnswers3': FieldValue.increment(1),
+                'nAnswers4': FieldValue.increment(0),
+              }
+            },
+          },
+          SetOptions(merge: true),
+        );
+      }
+      if (answers[i] == 4) {
+        await _firestore.collection('surveys').doc(id).set(
+          {
+            'answers': {
+              i.toString(): {
+                'nAnswers1': FieldValue.increment(0),
+                'nAnswers2': FieldValue.increment(0),
+                'nAnswers3': FieldValue.increment(0),
+                'nAnswers4': FieldValue.increment(1),
+              }
+            },
+          },
+          SetOptions(merge: true),
+        );
+      }
+    }
+  }
 }

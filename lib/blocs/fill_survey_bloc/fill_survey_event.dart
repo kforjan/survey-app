@@ -9,6 +9,12 @@ class LoadSurveyQuestions extends FillSurveyEvent {
   LoadSurveyQuestions(this.id);
 }
 
-class ChangeSurveyData extends FillSurveyEvent {}
+class FinishSurveyFill extends FillSurveyEvent {
+  FinishSurveyFill({
+    required this.id,
+    required this.surveyAnswers,
+  });
 
-class FinishSurvey extends FillSurveyEvent {}
+  final String id;
+  final List<int> surveyAnswers;
+}

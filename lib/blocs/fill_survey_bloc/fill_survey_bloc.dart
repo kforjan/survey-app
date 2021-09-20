@@ -20,6 +20,9 @@ class FillSurveyBloc extends Bloc<FillSurveyEvent, FillSurveyState> {
     if (event is LoadSurveyQuestions) {
       yield* _mapLoadSurveyQuestionsToState(event);
     }
+    if (event is FinishSurveyFill) {
+      yield* _mapFinishSurveyFillToState(event);
+    }
   }
 
   Stream<FillSurveyState> _mapLoadSurveyQuestionsToState(
@@ -32,5 +35,12 @@ class FillSurveyBloc extends Bloc<FillSurveyEvent, FillSurveyState> {
     } catch (e) {
       yield ConnectionFailure();
     }
+  }
+
+  Stream<FillSurveyState> _mapFinishSurveyFillToState(
+      FinishSurveyFill event) async* {
+    print('pokusaj');
+    _surveyRepository.uploadSurveyAnswers(event.id, event.surveyAnswers);
+    print('yay');
   }
 }

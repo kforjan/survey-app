@@ -59,7 +59,7 @@ class _CreateSurveyScreenState extends State<CreateSurveyScreen> {
                           return;
                         }
                         locator<SurveyCreationBloc>()
-                            .add(FinishSurvey(_titleController.text));
+                            .add(FinishSurveyCreation(_titleController.text));
                         _titleController.clear();
                       },
                       child: Text('Submit'),

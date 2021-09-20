@@ -25,7 +25,7 @@ class SurveyCreationBloc
     if (event is RemoveQuestion) {
       yield* _mapRemoveQuestionToState(event, state);
     }
-    if (event is FinishSurvey) {
+    if (event is FinishSurveyCreation) {
       yield* _mapFinishSurveyToState(event, state);
     }
   }
@@ -53,7 +53,7 @@ class SurveyCreationBloc
   }
 
   Stream<SurveyCreationState> _mapFinishSurveyToState(
-      FinishSurvey event, SurveyCreationState state) async* {
+      FinishSurveyCreation event, SurveyCreationState state) async* {
     if (state is SurveyCreationInitial) {
       try {
         yield SurveyCreationUploading();
