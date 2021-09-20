@@ -39,8 +39,6 @@ class FillSurveyBloc extends Bloc<FillSurveyEvent, FillSurveyState> {
 
   Stream<FillSurveyState> _mapFinishSurveyFillToState(
       FinishSurveyFill event) async* {
-    print('pokusaj');
     _surveyRepository.uploadSurveyAnswers(event.id, event.surveyAnswers);
-    print('yay');
   }
 }

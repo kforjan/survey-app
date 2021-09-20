@@ -125,7 +125,7 @@ class _FillSurveyScreenState extends State<FillSurveyScreen> {
                     answers[index] = value!;
                   });
                 },
-                title: Text(question.answer1),
+                title: Text(question.answer2),
               ),
             ),
             SizedBox(
@@ -138,7 +138,7 @@ class _FillSurveyScreenState extends State<FillSurveyScreen> {
                     answers[index] = value!;
                   });
                 },
-                title: Text(question.answer1),
+                title: Text(question.answer3),
               ),
             ),
             SizedBox(
@@ -151,7 +151,7 @@ class _FillSurveyScreenState extends State<FillSurveyScreen> {
                     answers[index] = value!;
                   });
                 },
-                title: Text(question.answer1),
+                title: Text(question.answer4),
               ),
             ),
           ],

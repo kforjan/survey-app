@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:survey_app/injection_container.dart';
 import 'package:survey_app/ui/register/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -47,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print(_email);
                     BlocProvider.of<AuthenticationBloc>(context).add(
                       LogIn(email: _email, password: _password),
                     );

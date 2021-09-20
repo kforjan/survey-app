@@ -26,7 +26,7 @@ class SurveyCreationBloc
       yield* _mapRemoveQuestionToState(event, state);
     }
     if (event is FinishSurveyCreation) {
-      yield* _mapFinishSurveyToState(event, state);
+      yield* _mapFinishSurveyCreationToState(event, state);
     }
   }
 
@@ -34,6 +34,7 @@ class SurveyCreationBloc
       AddQuestion event, SurveyCreationState prevState) async* {
     if (prevState is SurveyCreationInitial) {
       final newQuestions = [...prevState.questions, event.question];
+
       yield SurveyCreationInitial(questions: newQuestions);
     }
   }
@@ -52,7 +53,7 @@ class SurveyCreationBloc
     }
   }
 
-  Stream<SurveyCreationState> _mapFinishSurveyToState(
+  Stream<SurveyCreationState> _mapFinishSurveyCreationToState(
       FinishSurveyCreation event, SurveyCreationState state) async* {
     if (state is SurveyCreationInitial) {
       try {

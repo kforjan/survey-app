@@ -11,9 +11,9 @@ class SurveyRepository {
         .map((e) => {
               'question': e.question,
               'answer1': e.answer1,
-              'answer2': e.answer1,
-              'answer3': e.answer1,
-              'answer4': e.answer1,
+              'answer2': e.answer2,
+              'answer3': e.answer3,
+              'answer4': e.answer4,
             })
         .toList();
     try {
@@ -46,6 +46,7 @@ class SurveyRepository {
   Future<List<Question>> loadSurvey(String id) async {
     final queryQuestion = await _firestore.collection('surveys').doc(id).get();
     final List<dynamic> questionsAsMaps = queryQuestion.data()!['questions'];
+    print(questionsAsMaps);
     final questions = questionsAsMaps
         .map(
           (e) => Question(
@@ -58,6 +59,19 @@ class SurveyRepository {
         )
         .toList();
     return questions;
+  }
+
+  Future<Map<String, dynamic>?> loadAnswerStatistics(String id) async {
+    final queryAnswerStats =
+        await _firestore.collection('surveys').doc(id).get();
+
+    try {
+      final Map<String, dynamic> answerStats =
+          Map.from(queryAnswerStats.data()!['answers']);
+      return answerStats;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<void> uploadSurveyAnswers(String id, List<int> answers) async {

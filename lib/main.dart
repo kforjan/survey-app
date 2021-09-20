@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:survey_app/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:survey_app/blocs/survey_creation_bloc/survey_creation_bloc.dart';
-import 'package:survey_app/blocs/survey_selection_bloc/survey_selection_bloc.dart';
 import 'package:survey_app/injection_container.dart' as di;
 import 'package:survey_app/ui/home/home_screen.dart';
 import 'package:survey_app/ui/login/login_screen.dart';
@@ -11,7 +10,9 @@ import 'package:survey_app/ui/login/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   di.setup();
+
   runApp(
     MultiBlocProvider(
       providers: [

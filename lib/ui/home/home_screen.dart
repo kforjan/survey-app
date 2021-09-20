@@ -7,6 +7,7 @@ import 'package:survey_app/injection_container.dart';
 import 'package:survey_app/ui/create_survey/create_survey_screen.dart';
 import 'package:survey_app/ui/fill_survey/fill_survey_screen.dart';
 import 'package:survey_app/ui/profile/profile_screen.dart';
+import 'package:survey_app/ui/statistics/statistics_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,8 +22,9 @@ class HomeScreen extends StatelessWidget {
               title: Text(state.user.email.toString()),
               actions: [
                 IconButton(
-                  onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
-                      .add(LogOut()),
+                  onPressed: () {
+                    BlocProvider.of<AuthenticationBloc>(context).add(LogOut());
+                  },
                   icon: Icon(Icons.logout),
                 ),
               ],
@@ -148,7 +150,16 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: Container(
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => StatisticsScreen(
+                        id: id,
+                        title: title,
+                      ),
+                    ),
+                  );
+                },
                 icon: Icon(CupertinoIcons.chart_pie_fill),
               ),
             ),
