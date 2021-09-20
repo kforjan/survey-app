@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                               locator<SurveySelectionBloc>().add(LoadSurveys());
                             },
                             child: ListView.builder(
-                              physics: BouncingScrollPhysics(),
+                              physics: AlwaysScrollableScrollPhysics(),
                               itemCount: state.ids.length,
                               itemBuilder: (context, index) =>
                                   _buildSurveySelectionCard(
